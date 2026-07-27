@@ -10,9 +10,8 @@
         inherit system;
       };
     in {
-      nixModules = [
-        ./nix/default.nix
-      ];
+      devShells.${system}.default = pkgs.callPackage ./nix/devshell.nix {
+      }; 
     };
 }
 
