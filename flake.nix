@@ -4,22 +4,12 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   };
   outputs = { nixpkgs, ... }:
-    let
-      inherit (nixpkgs.lib) genAttrs;
-      inherit (nixpkgs.lib.systems) flakeExposed;
-      forEachSystem =
-        perSystem:
-        genAttrs flakeExposed (
-          system:
-          let
-            pkgs = nixpkgs.legacyPackages.${system};
-          in
-          perSystem { inherit pkgs system; }
-        );
-    in
     {
-      devShells = forEachSystem (
-        { pkgs, ... }:
+      devShells = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
         {
           default = pkgs.callPackage ./nix/devshell.nix { };
         }
