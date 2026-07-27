@@ -10,11 +10,9 @@
         inherit system;
       };
     in {
-      devShells.${system}.default = pkgs.mkShell {
-        nativeBuildInputs = with pkgs; [
-          python3
-        ];
-      }; 
+      nixModules = [
+        ./nix/default.nix
+      ];
     };
 }
 
