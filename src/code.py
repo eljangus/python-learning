@@ -1,20 +1,40 @@
-firstnum = input("first number: ")
-operator = input("operator: ")
-secondnum = input("second num: ")
-firstnum = float(firstnum)
-secondnum = float(secondnum)
+def getnumbers():
+    firstnum = float(input("first number: "))
+    operator = input("operator: ")
+    secondnum = float(input("second num: "))
+    return firstnum, operator, secondnum
 
-print(firstnum, operator, secondnum)
-check = input("is this correct? (y/n) ")
-if check == "y":
+
+def check(firstnum, operator, secondnum):
+    print(firstnum, operator, secondnum)
+    checking = input("is this correct? (y/n): ")
+    return checking
+
+
+def calculate(firstnum, operator, secondnum):
     match operator:
-        case "-":
-            print(firstnum-secondnum)
         case "+":
-            print(firstnum+secondnum)
+            print(firstnum + secondnum)
+        case "-":
+            print(firstnum - secondnum)
         case "*":
-            print(firstnum*secondnum)
+            print(firstnum * secondnum)
         case "/":
-            print(firstnum/secondnum)
-else:
-    print("go kys")
+            print(firstnum / secondnum)
+
+
+def calculator():
+    while True:
+        firstnum, operator, secondnum = getnumbers()
+        checking = check(firstnum, operator, secondnum)
+
+        if checking == ("y"):
+            calculate(firstnum, operator, secondnum)
+            break
+        elif checking == ("n"):
+            print("Let's try again.\n")
+        else:
+            print("go kys retard")
+            break
+
+calculator()
