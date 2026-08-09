@@ -6,6 +6,7 @@ def fatty(name, weight, height):
         print(name, "du bist gesund! Dein BMI beträgt:", BMI)
     elif BMI <= 18.5:
         print(name, "du bist ein Stock! Dein BMI beträgt:", BMI)
+    return BMI, name
 
 
 fatty(input("Wie lautet dein Name?: "), float(input("Was ist dein Gewicht in kg?: ")), float(input("Was ist deine Größe in m?: ")))
