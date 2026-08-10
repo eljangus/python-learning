@@ -2,7 +2,6 @@ print("Welcome to the BMI calculator!")
 
 dictionary = dict()
 
-
 while True:
     name = str(input("What is your name?: "))
     weight = float(input("What is your weight in kg?: "))
