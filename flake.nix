@@ -8,7 +8,7 @@
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
       in {
-        default = pkgs.callPackage ./nix/devshell.nix {};
+        default = pkgs.callPackage ./nix/shell.nix {};
       }
     );
   };
