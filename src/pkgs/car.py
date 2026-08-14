@@ -36,13 +36,3 @@ class Motorcycle(Vehicle):
     def start(self):
         print("Sorry, out of fuel!")
 
-
-c1 = Car()
-m1 = Motorcycle(True)
-
-c1.start()
-c1.increase_speed(100)
-print(c1.speed)
-
-m1.start()
-print(m1.center_stand_out)
