@@ -1,8 +1,8 @@
 class Triangle:
-    def __init__(self, va: float, vb: float, vc: float):
-        self.a = va
-        self.b = vb
-        self.c = vc
+    def __init__(self, a: float, b: float, c: float):
+        self.a = a
+        self.b = b
+        self.c = c
 
     def equilateral(self):
         if self.a == self.b == self.c:
