@@ -83,7 +83,7 @@ class Todo:
     def append_file(self, todo_file: str):
         with open(todo_file, "a") as f:
             self.append = f.write(
-                input(f"What do you wish to append to your TO-DO entry?:\n") + "\n"
+                f"- " + input(f"What do you wish to append to your TO-DO entry?:\n") + "\n"
             )
         return self.append
 
