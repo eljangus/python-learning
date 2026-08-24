@@ -1,5 +1,4 @@
-import pkgs.reversestring as rs
+import pkgs.todo as todo
 
-v1 = rs.ReverseString(input("Which string do you want to reverse?: "))
-print(v1.strR())
-
+obj = todo.Todo()
+obj.read_dir()
