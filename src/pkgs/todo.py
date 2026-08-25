@@ -92,7 +92,7 @@ class Todo:
                 )
             check_if_done = input(f"\nWas that all? (y/n):\n")
             print("")
-            check_if_done.strip().lower().isalnum()
+            check_if_done = check_if_done.strip().lower()
             if check_if_done == "y":
                 self.read_file(todo_file)
                 print(f"\n{self.file_content}")
@@ -119,12 +119,12 @@ if file_list == []:
     creation_user_input = input(
         "Welcome to your python TO-DO list!\nIt seems you haven't yet created a todo list, would you wish to do so? (y/n):\n"
     )
-    creation_user_input.lower().strip().isalnum()
+    creation_user_input = creation_user_input.lower().strip()
     print("")
     if creation_user_input == "y":
         filename = input("What should be the filename?:\n")
         print("")
-        filename.strip().lower().isalnum()
+        filename = filename.strip().lower()
         todo.create_file(filename)
         is_file_initialised = True
     elif creation_user_input == "n":
