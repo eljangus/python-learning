@@ -1,9 +1,6 @@
 import os
 from pathlib import Path
 
-dirname = f"{Path.home()}/.config/todopy/"
-file_list = list()
-
 
 class Prompt:
     def __init__(self):
@@ -49,10 +46,12 @@ class Prompt:
 
 class Todo:
     def __init__(self):
+        self.dirname = f"{Path.home()}/.config/todopy/"
+        self.file_list = list()
         pass
 
     def create_file(self, filename: str):
-        with open(f"{dirname}/{filename}.txt", "w") as f:
+        with open(f"{self.dirname}/{filename}.txt", "w") as f:
             header = input(
                 "What should be the header of the newly created todo list?:\n"
             )
@@ -66,14 +65,14 @@ class Todo:
     def get_file_path(self):
         self.list_of_filepaths = list()
         self.names_of_filepaths = list()
-        for e in os.scandir(dirname):
+        for e in os.scandir(self.dirname):
             if e.is_file():
                 self.list_of_filepaths.append(e.path)
                 self.names_of_filepaths.append(e.name)
         return self.list_of_filepaths, self.names_of_filepaths
 
     def read_dir(self):
-        for e in os.scandir(dirname):
+        for e in os.scandir(self.dirname):
             if e.is_file():
                 with open(e.path, "r") as f:
                     print(f"{e.name}:")
@@ -103,18 +102,18 @@ class Todo:
                 raise Exception("Input must be either y or n!")
 
 
-if os.path.exists(dirname):
+todo = Todo()
+if os.path.exists(todo.dirname):
     pass
 else:
-    os.mkdir(dirname)
+    os.mkdir(todo.dirname)
 
-for e in os.scandir(dirname):
+for e in os.scandir(todo.dirname):
     if e.is_file():
         with open(e.path, "r") as f:
-            file_list.append(e.path)
+            todo.file_list.append(e.path)
 
-todo = Todo()
-if file_list == []:
+if todo.file_list == []:
     is_file_initialised = False
     creation_user_input = input(
         "Welcome to your python TO-DO list!\nIt seems you haven't yet created a todo list, would you wish to do so? (y/n):\n"
@@ -131,7 +130,7 @@ if file_list == []:
         pass
     else:
         raise Exception("You must either enter y or n!")
-elif file_list != []:
+elif todo.file_list != []:
     is_file_initialised = True
 else:
     pass
