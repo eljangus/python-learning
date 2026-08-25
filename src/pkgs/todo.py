@@ -102,41 +102,39 @@ class Todo:
                 raise Exception("Input must be either y or n!")
 
 
-todo = Todo()
-if os.path.exists(todo.dirname):
-    pass
-else:
-    os.mkdir(todo.dirname)
-
-for e in os.scandir(todo.dirname):
-    if e.is_file():
-        with open(e.path, "r") as f:
-            todo.file_list.append(e.path)
-
-if todo.file_list == []:
-    is_file_initialised = False
-    creation_user_input = input(
-        "Welcome to your python TO-DO list!\nIt seems you haven't yet created a todo list, would you wish to do so? (y/n):\n"
-    )
-    creation_user_input = creation_user_input.lower().strip()
-    print("")
-    if creation_user_input == "y":
-        filename = input("What should be the filename?:\n")
-        print("")
-        filename = filename.strip().lower()
-        todo.create_file(filename)
-        is_file_initialised = True
-    elif creation_user_input == "n":
+if __name__ == "__main__":
+    todo = Todo()
+    if os.path.exists(todo.dirname):
         pass
     else:
-        raise Exception("You must either enter y or n!")
-elif todo.file_list != []:
-    is_file_initialised = True
-else:
-    pass
+        os.mkdir(todo.dirname)
 
+    for e in os.scandir(todo.dirname):
+        if e.is_file():
+            with open(e.path, "r") as f:
+                todo.file_list.append(e.path)
 
-if __name__ == "__main__":
+    if todo.file_list == []:
+        is_file_initialised = False
+        creation_user_input = input(
+            "Welcome to your python TO-DO list!\nIt seems you haven't yet created a todo list, would you wish to do so? (y/n):\n"
+        )
+        creation_user_input = creation_user_input.lower().strip()
+        print("")
+        if creation_user_input == "y":
+            filename = input("What should be the filename?:\n")
+            print("")
+            filename = filename.strip().lower()
+            todo.create_file(filename)
+            is_file_initialised = True
+        elif creation_user_input == "n":
+            pass
+        else:
+            raise Exception("You must either enter y or n!")
+    elif todo.file_list != []:
+        is_file_initialised = True
+    else:
+        pass
     welcome = Prompt()
     if is_file_initialised:
         print("\nWelcome to todopy!\n")
