@@ -1,0 +1,5 @@
+# Pin the target Python so the type checker doesn't fall back to macOS's
+# system python3 (3.9), which rejects `match`, backslashes in f-strings, etc.
+# nvf's pyrefly LSP treats this file as a project root marker.
+python-version = "3.14"
+project-includes = ["src"]
