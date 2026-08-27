@@ -10,12 +10,13 @@ class Prompt:
     def welcome(self):
         print(f"Welcome to todopy!\n")
         print(f"1. List todo lists")
-        print(f"2. Append to todo lists")
-        print(f"3. Remove Lines from todo lists")
-        print(f"4. Delete todo lists")
-        print(f"5. Create todo lists")
-        print(f"6. Exit")
-        self.number_of_options = 6
+        print(f"2. Read todo lists")
+        print(f"3. Append to todo lists")
+        print(f"4. Remove Lines from todo lists")
+        print(f"5. Delete todo lists")
+        print(f"6. Create todo lists")
+        print(f"7. Exit")
+        self.number_of_options = 7
         try:
             self.main_input = int(input(f"\nSelect an option:\n"))
             print("")
@@ -28,6 +29,7 @@ class Prompt:
     def process_input(self):
         while True:
             match self.main_input:
+                # list todo lists
                 case 1:
                     print("Following todo lists exist:\n")
                     todo.read_dir()
@@ -37,7 +39,24 @@ class Prompt:
                     elif self.check_value == False:
                         pass
                     self.welcome()
+                # read todo lists
                 case 2:
+                    todo.get_file_path()
+                    todo.recursively_print_lists()
+                    print("")
+                    sub_input = int(input("Which file do you wish to read?:\n"))
+                    print("")
+                    todo_file = todo.list_of_filepaths[sub_input - 1]
+                    todo.read_file(todo_file)
+                    print(f"{todo.file_content}")
+                    self.check_if_done()
+                    if self.check_value == True:
+                        break
+                    elif self.check_value == False:
+                        pass
+                    self.welcome()
+                # append to a todo file
+                case 3:
                     todo.get_file_path()
                     todo.recursively_print_lists()
                     print("")
@@ -53,12 +72,15 @@ class Prompt:
                     elif self.check_value == False:
                         pass
                     self.welcome()
-                case 3:
+                # remove a todo list entry (line)
+                case 4:
                     todo.get_file_path()
                     todo.recursively_print_lists()
                     print("")
                     sub_input = int(
-                        input("Which file do you wish to remove a todo entry from?:\n")
+                        input(
+                            "Which todo list do you wish to remove a todo entry from?:\n"
+                        )
                     )
                     print("")
                     todo_file = todo.list_of_filepaths[sub_input - 1]
@@ -70,13 +92,38 @@ class Prompt:
                     elif self.check_value == False:
                         pass
                     self.welcome()
-                case 4:
-                    todo.read_dir()
-                    break
+                # remove a todo list
                 case 5:
-                    todo.read_dir()
-                    break
+                    todo.get_file_path()
+                    todo.recursively_print_lists()
+                    print("")
+                    sub_input = int(input("Which todo list do you wish to delete?:\n"))
+                    print("")
+                    todo_file = todo.list_of_filepaths[sub_input - 1]
+                    todo.delete_todo_list(todo_file)
+                    self.check_if_done()
+                    if self.check_value == True:
+                        break
+                    elif self.check_value == False:
+                        pass
+                    self.welcome()
+                # create a todo lsit
                 case 6:
+                    todo.get_file_path()
+                    todo.recursively_print_lists()
+                    print("")
+                    filename = input("What should be the filename?:\n")
+                    print("")
+                    filename = filename.strip().lower()
+                    todo.create_file(filename)
+                    self.check_if_done()
+                    if self.check_value == True:
+                        break
+                    elif self.check_value == False:
+                        pass
+                    self.welcome()
+                # leave the program
+                case 7:
                     print("See you next time!")
                     break
 
@@ -166,6 +213,9 @@ class Todo:
                     print(f"{e.name}:")
                     print(f"{f.readline().rstrip('\n')}")
                     print("")
+
+    def delete_todo_list(self, todo_file: str):
+        os.remove(f"{todo_file}")
 
     def append_file(self, todo_file: str):
         self.read_file(todo_file)
