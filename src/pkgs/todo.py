@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 
@@ -12,7 +13,9 @@ class Prompt:
         print(f"2. Append to todo lists")
         print(f"3. Remove Lines from todo lists")
         print(f"4. Delete todo lists")
-        self.number_of_options = 4
+        print(f"5. Create todo lists")
+        print(f"6. Exit")
+        self.number_of_options = 6
         try:
             self.main_input = int(input(f"\nSelect an option:\n"))
             print("")
@@ -28,7 +31,12 @@ class Prompt:
                 case 1:
                     print("Following todo lists exist:\n")
                     todo.read_dir()
-                    break
+                    self.check_if_done()
+                    if self.check_value == True:
+                        break
+                    elif self.check_value == False:
+                        pass
+                    self.welcome()
                 case 2:
                     todo.get_file_path()
                     todo.recursively_print_lists()
@@ -37,7 +45,14 @@ class Prompt:
                     print("")
                     todo_file = todo.list_of_filepaths[sub_input - 1]
                     todo.append_file(todo_file)
-                    break
+                    todo.read_file(todo_file)
+                    print(f"{todo.file_content}")
+                    self.check_if_done()
+                    if self.check_value == True:
+                        break
+                    elif self.check_value == False:
+                        pass
+                    self.welcome()
                 case 3:
                     todo.get_file_path()
                     todo.recursively_print_lists()
@@ -47,14 +62,35 @@ class Prompt:
                     )
                     print("")
                     todo_file = todo.list_of_filepaths[sub_input - 1]
-                    todo.read_file(todo_file)
+                    todo.remove_todo_entry(todo_file)
                     todo.print_line_by_line(todo_file)
-                    self.file_input = int(input("Which line do you wish to remove?:\n"))
-                    todo.remove_todo_entry(todo_file, self.file_input)
-                    break
+                    self.check_if_done()
+                    if self.check_value == True:
+                        break
+                    elif self.check_value == False:
+                        pass
+                    self.welcome()
                 case 4:
                     todo.read_dir()
                     break
+                case 5:
+                    todo.read_dir()
+                    break
+                case 6:
+                    print("See you next time!")
+                    break
+
+    def check_if_done(self):
+        check_if_done = input("Was that all? (y/n):\n")
+        print("")
+        check_if_done = check_if_done.lower().strip()
+        if check_if_done == "y":
+            self.check_value = True
+        elif check_if_done == "n":
+            self.check_value = False
+        else:
+            raise Exception("Input must be either y or n!")
+        return self.check_value
 
     def initial_check(self):
         if os.path.exists(todo.dirname):
@@ -78,7 +114,6 @@ class Prompt:
                 print("")
                 filename = filename.strip().lower()
                 todo.create_file(filename)
-                is_file_initialised = True
             elif creation_user_input == "n":
                 pass
             else:
@@ -133,60 +168,52 @@ class Todo:
                     print("")
 
     def append_file(self, todo_file: str):
-        while True:
-            self.read_file(todo_file)
-            print(self.file_content)
-            with open(todo_file, "a") as f:
-                f.write(
-                    f"- "
-                    + input(f"What do you wish to append to your TO-DO entry?:\n")
-                    + "\n"
+        self.read_file(todo_file)
+        print(self.file_content)
+        with open(todo_file, "a") as f:
+            f.write(
+                f"- "
+                + input(f"What do you wish to append to your TO-DO entry?:\n")
+                + "\n"
+            )
+        print("")
+
+    def remove_todo_entry(self, todo_file: str):
+        self.print_line_by_line(todo_file)
+        self.file_input = int(input("Which line do you wish to remove?:\n"))
+        print("")
+        if self.file_input == 1:
+            user_input = input(
+                "You cannot remove the header!\nDo you wish to change it instead? (y/n):\n"
+            )
+            print("")
+            user_input = user_input.strip().lower()
+            if user_input == "y":
+                with open(todo_file, "r") as fr:
+                    lines = fr.readlines()
+                new_header = (
+                    input("What do you wish for the new header to be?:\n") + "\n"
                 )
-            check_if_done = input(f"\nWas that all? (y/n):\n")
-            check_if_done = check_if_done.strip().lower()
-            if check_if_done == "y":
-                self.read_file(todo_file)
-                print(f"\n{self.file_content}")
-                break
-            elif check_if_done == "n":
+                print("")
+                if len(lines) > 0:
+                    lines[0] = new_header
+                else:
+                    lines.append(new_header)
+                with open(todo_file, "w") as f:
+                    f.writelines(lines)
+            elif user_input == "n":
                 pass
             else:
                 raise Exception("Input must be either y or n!")
-
-    def remove_todo_entry(self, todo_file: str, file_nr: int):
-        while True:
-            if welcome.file_input == 1:
-                user_input = input(
-                    "\nYou cannot remove the header!\nDo you wish to change it instead? (y/n):\n"
-                )
-                print("")
-                user_input = user_input.strip().lower()
-                if user_input == "y":
-                    with open(todo_file, "r") as fr:
-                        lines = fr.readlines()
-                    new_header = input(
-                        "What do you wish for the new header to be?:\n" + "\n"
-                    )
-                    print("")
-                    if len(lines) > 0:
-                        lines[0] = new_header
-                    else:
-                        lines.append(new_header)
-                    with open(todo_file, "w") as f:
-                        f.writelines(lines)
-                else:
-                    break
-            else:
-                with open(todo_file, "r") as fr:
-                    self.lines = fr.readlines()
-                    n = 1
-                with open(todo_file, "w") as f:
-                    for line in self.lines:
-                        if n != welcome.file_input:
-                            f.write(line)
-                        n += 1
-                self.print_line_by_line(todo_file)
-            break
+        else:
+            with open(todo_file, "r") as fr:
+                self.lines = fr.readlines()
+                n = 1
+            with open(todo_file, "w") as f:
+                for line in self.lines:
+                    if n != self.file_input:
+                        f.write(line)
+                    n += 1
 
     def recursively_print_lists(self):
         n = 1
